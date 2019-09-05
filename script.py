@@ -19,12 +19,11 @@ if __name__ == "__main__":
 
     challengers = RiotAPI.get_challengers()
 
-    print(challengers)
-
     for player in challengers:
         fetch.download_matches(player, directory_name)
 
 
 
     #Ensures current API key works, and updates it if necessary
+    #Another comment
 
