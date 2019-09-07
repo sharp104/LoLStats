@@ -11,7 +11,7 @@ import fetch_functions as fetch
 if __name__ == "__main__":
     #Makes directory to store matches
     dt = datetime.datetime.now()
-    directory_name = "Data\\Matches " + dt.strftime("%m-%d-%Y")
+    directory_name = "Data/Matches " + dt.strftime("%m-%d-%Y")
     try:
         os.mkdir(directory_name)
     except:

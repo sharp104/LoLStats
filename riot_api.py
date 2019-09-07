@@ -1,6 +1,8 @@
-import time as time
-import requests as requests
+import json
 import pprint
+import time as time
+
+import requests as requests
 
 class RiotAPI:
     """This static class contains methods and associated data relevant to
@@ -49,7 +51,7 @@ class RiotAPI:
 
         result = RiotAPI.handle_error(url, result)
         
-        return(result.json())
+        return(result)
 
     @staticmethod
     def handle_error(url, result):
@@ -65,7 +67,7 @@ class RiotAPI:
             #If statements to handle all kinds of errors
             if code == 200:
                 #Request was successful
-                return(result)
+                return(result.json())
             elif code == 400:
                 raise Exception("Bad Request")
             elif code == 401:
@@ -74,9 +76,8 @@ class RiotAPI:
             elif code == 403:
                 raise Exception("Forbidden")
             elif code == 404:
-                #TODO: Handling for not found
-                # Typical when a summoner name changes, for example
-                return
+                #TODO: Explore better handling of this case
+                return {}
             elif code == 415:
                 raise Exception("Unsupported Media Type")
             elif code == 429:
@@ -93,7 +94,7 @@ class RiotAPI:
                 result = requests.get(url)
 
 
-        return(result)
+        return(result.json())
 
     #URLs
     
@@ -103,6 +104,7 @@ class RiotAPI:
     #MATCH-V4
     matchlist_by_id_base = ".api.riotgames.com/lol/match/v4/matchlists/by-account/"
     match_by_number_base = ".api.riotgames.com/lol/match/v4/matches/"
+    timeline_by_number_base = ".api.riotgames.com/lol/match/v4/timelines/by-match/"
 
     #SUMMONER-V4
     player_by_summoner_base = ".api.riotgames.com/lol/summoner/v4/summoners/by-name/"
@@ -142,6 +144,16 @@ class RiotAPI:
         raw = RiotAPI.make_request(url)
         match = raw
         return(match)
+
+    @staticmethod
+    def get_timeline_by_number(match_num):
+        """Returns a match timeline dictionary given a match number"""
+
+        url = "https://" + RiotAPI.region + RiotAPI.timeline_by_number_base + str(match_num)
+        url += "?api_key=" + RiotAPI.api_key
+        raw = RiotAPI.make_request(url)
+        timeline = raw
+        return timeline
 
     @staticmethod
     def get_challengers():

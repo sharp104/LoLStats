@@ -15,8 +15,16 @@ def download_matches(summoner_name, folder):
         if os.path.exists(filename):
             count += 1
             continue
+
+        match_num = match_num['gameId']
         
-        match_data = RiotAPI.get_match_by_number(match_num['gameId'])
+        match_data_general = RiotAPI.get_match_by_number(match_num)
+        match_data_timeline = RiotAPI.get_timeline_by_number(match_num)
+
+        match_data = {
+            'stats': match_data_general,
+            'timeline': match_data_timeline,
+        }
 
         with open(filename, 'w') as file:
             json.dump(match_data, file)
